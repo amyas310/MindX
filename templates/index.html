@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>视频转思维导图</title>
+</head>
+<body>
+    <h1>视频转思维导图工具</h1>
+    <input type="text" id="videoUrl" placeholder="输入YouTube/Bilibili视频链接">
+    <button onclick="processVideo()">转换</button>
+    <div id="result"></div>
+
+    <script>
+        function processVideo() {
+            const url = document.getElementById('videoUrl').value;
+            fetch('/process', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.error) {
+                    document.getElementById('result').innerHTML = `错误: ${data.error}`;
+                } else {
+                    document.getElementById('result').innerHTML = 
+                        `转换成功！<a href="/download/${data.mindmap_file}">下载思维导图</a>`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
